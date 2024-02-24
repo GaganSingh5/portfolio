@@ -1,0 +1,28 @@
+name: deploy_on_push
+run-name: ${{ github.actor }} is executed this action.
+on:
+  push:
+    branches: ["main"]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Setup Bun Environment
+        uses: oven-sh/setup-bun@v1.1.1
+      - name: Install Dependencies
+        run: bun install
+      - name: Build Project
+        run: bun run build
+      - name: Deploy
+        run: |
+          git config --global user.name $user_name
+          git config --global user.email $user_email
+          git remote set-url origin https://${github_token}@github.com/${repository}
+          bun run deploy
+        env:
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+          repository: ${{ github.repository }}
