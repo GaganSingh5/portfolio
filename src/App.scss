@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "lokanova";
+  src: local("lokanova"),
+    url("./assets/Lokanova Rounded.otf") format("opentype");
+}
+@font-face {
+  font-family: "strretch";
+  src: local("strretch"), url("./assets/STRRETCH\ SANS.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "morganite";
+  src: local("morganite"), url("./assets/Morganite-Bold.ttf") format("opentype");
+}
+.bg-noise {
+    // Simple class to reuse wherever you want to make some noise.
+    background-image: url("https://i.ibb.co/FgcVfGG/bg-noise-1.png");
+    // animation: 250ms steps(10, end) 0s infinite alternate-reverse none running noise-animation;
+    @keyframes noise-animation {
+      0% {
+        background-position: 0% 0%;
+      }
+      10% {
+        background-position: -5% -5%;
+      }
+      20% {
+        background-position: -10% 5%;
+      }
+      30% {
+        background-position: 5% -10%;
+      }
+      40% {
+        background-position: -5% 15%;
+      }
+      50% {
+        background-position: -10% 5%;
+      }
+      60% {
+        background-position: 5% 5%;
+      }
+      70% {
+        background-position: 0% 10%;
+      }
+      80% {
+        background-position: -5% -5%;
+      }
+      90% {
+        background-position: 10% 5%;
+      }
+    }
+  }
+.app {
+  
+  .home {
+    .home__hero {
+      .home__hero__header {
+        font-size: 26rem;
+        font-family: morganite;
+        letter-spacing: 0.1512rem;
+        width: -moz-fit-content;
+        width: fit-content;
+        line-height: 73%;
+      }
+
+      .home__hero__header2 {
+        font-size: 26rem;
+        font-family: strretch;
+        letter-spacing: 0.1512rem;
+        width: -moz-fit-content;
+        width: fit-content;
+        margin: 0 auto;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 73%;
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    .home__canvas {
+      div {
+        canvas {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
