@@ -3,6 +3,7 @@ import p5 from "p5";
 const color = ["#F6995C", "#AD88C6", "#9BB0C1", "#C5EBAA", "#FFC0D9", "#EBE3D5"]
 class Chain {
   links: Matter.Composite;
+  linkWidth: number;
   constraints: Matter.Constraint[];
   p: p5;
   pos: Matter.Vector[] = [];
@@ -16,9 +17,10 @@ class Chain {
     linkOptions: Matter.IChamferableBodyDefinition, 
     p5Instance: p5) {
     // let group = Matter.Body.nextGroup(true);
+    this.linkWidth = linkWidth;
     this.links = Matter.Composites.stack(x, y, 1, numLinks, 10, 0, (x: number, y: number) => {
       linkWidth;
-      return Matter.Bodies.rectangle(x, y, linkWidth, linkHeight, {
+      return Matter.Bodies.rectangle(x, y, linkHeight, linkWidth, {
         ...linkOptions,
         collisionFilter: {
           group: -2,
@@ -45,7 +47,7 @@ class Chain {
       this.p.rectMode(this.p.CENTER);
       this.p.fill(fillColor);
       this.p.stroke(fillColor);
-      this.p.rect(0, 0, 50, 10, 12);
+      this.p.rect(0, 0, 50, this.linkWidth, 12);
       this.p.pop();
     }
 

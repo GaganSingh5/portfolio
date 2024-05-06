@@ -14,8 +14,6 @@ function App() {
   const sketch = useCallback((p5Instance: p5) => {
     let engine: Matter.Engine;
     let world: Matter.World;
-    let mattRender = Matter.Render;
-    let mattRunner = Matter.Runner;
     let alphabets: Alphabet[] = [];
     let chain: Chain;
     let chains: Chain[] = [];
@@ -26,32 +24,40 @@ function App() {
     let renderer: p5.Renderer;
     let leftWall = null;
     let rightWall = null;
-    let topWall = null;
+    // let topWall = null;
     let bottomWall = null;
-    let divisions = (canvasDivRef.current?.clientWidth || 600) / 12;
+    let divisions = (canvasDivRef.current?.clientWidth || 600) / 13;
 
     const init = (render: p5.Renderer) => {
+      console.log(canvasDivRef.current?.clientWidth);
+
       leftWall = Matter.Bodies.rectangle(-25,
         (canvasDivRef.current?.clientHeight || 600) / 2,
-        100, canvasDivRef.current?.clientHeight || 600,
+        100, (canvasDivRef.current?.clientHeight || 600) + 500,
         {
-          isStatic: true
+          isStatic: true,
+          collisionFilter: {
+            group: 0x001
+          }
         }
       );
       rightWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) + 25,
-        (canvasDivRef.current?.clientHeight || 600) / 2, 100, canvasDivRef.current?.clientHeight || 600,
-        {
-          isStatic: true
-        }
-      );
-      topWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) / 2, -20,
-        canvasDivRef.current?.clientWidth || 600,
-        50,
+        (canvasDivRef.current?.clientHeight || 600) / 2, 100, (canvasDivRef.current?.clientHeight || 600) + 500,
         {
           isStatic: true,
-
+          collisionFilter: {
+            group: 0x001
+          }
         }
       );
+      // topWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) / 2, -20,
+      //   canvasDivRef.current?.clientWidth || 600,
+      //   50,
+      //   {
+      //     isStatic: true,
+
+      //   }
+      // );
       bottomWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) / 2,
         (canvasDivRef.current?.clientHeight || 600) + 45,
         (canvasDivRef.current?.clientWidth || 600) + 500,
@@ -80,14 +86,14 @@ function App() {
       const arr = wordList?.map((word, index) => {
         return {
           word: word,
-          xCoor: (divisions / 2) + divisions * 1.5 + divisions * index,
+          xCoor: (divisions / 2) + divisions * 2 + divisions * index,
           yCoor: (canvasDivRef.current?.clientHeight || 600) / 2
         }
       })
 
-      arr.forEach((e, index) => {
-        const color = ["#F6995C", "#AD88C6", "#9BB0C1", "#C5EBAA", "#FFC0D9", "#EBE3D5"]
-        let currColor = color[index % color.length];
+      arr.forEach((e) => {
+        // const color = ["#F6995C", "#AD88C6", "#9BB0C1", "#C5EBAA", "#FFC0D9", "#EBE3D5"]
+        // let currColor = color[index % color.length];
         let alphabet = new Alphabet(e.word, e.xCoor + 10, e.yCoor + 10, {
           isStatic: false,
           mass: 1,
@@ -100,14 +106,14 @@ function App() {
         }, {
           fillColor: "#F5EEE6",
           strokeColor: "#F5EEE6",
-          scaleX: 1.5,
-          scaleY: 1.5
+          scaleX: Math.min(2.5, ((canvasDivRef.current?.clientWidth || 600) / 2560) * 2.5),
+          scaleY: Math.min(2.5, ((canvasDivRef.current?.clientWidth || 600) / 2560) * 2.5)
         })
         alphabets.push(alphabet);
 
         // Matter.Body.setCentre(alphabet.alphabet, { x: 0, y: -20 }, true)
 
-        chain = new Chain(e.xCoor, 0, 8, 50, 10, { chamfer: { radius: 5 } }, p5Instance)
+        chain = new Chain(e.xCoor, 0, 8, 10, 50, { chamfer: { radius: 5 } }, p5Instance)
         chains.push(chain);
 
         constraint.push(
@@ -182,18 +188,18 @@ function App() {
 
       })
 
-      for (let index = 0; index < 100; index++) {
+      for (let index = 0; index < 90; index++) {
         // const group = Matter.Body.nextGroup(true);
         const color = ["#F6995C", "#AD88C6", "#9BB0C1", "#C5EBAA", "#FFC0D9", "#EBE3D5"]
         let currColor = color[index % color.length];
-        
+
         let ball = new Ball(
           Math.random() * (canvasDivRef.current?.clientWidth || 600),
           -2000,
-          Math.random() * 20 + 5,
+          Math.random() * 20 + 10,
           {
-            mass: 10,
-            restitution: 0.8,
+            mass: 1,
+            restitution: 0.5,
             // frictionAir: 0.09,
             isStatic: false, collisionFilter: {
               category: 5,
@@ -203,8 +209,7 @@ function App() {
           },
           { fillColor: currColor, strokeColor: currColor }
         )
-        console.log(ball);
-        
+
         balls.push(ball)
 
         Matter.World.add(world, ball.ball);
@@ -212,7 +217,7 @@ function App() {
       }
 
       let canvasElement: HTMLElement = render.elt;
-      mouse = Matter.Mouse.create(canvasElement || canvasElement);
+      mouse = Matter.Mouse.create(canvasElement);
       mouse.pixelRatio = p5Instance.pixelDensity();
       mcontstraint = Matter.MouseConstraint.create(engine, {
         mouse: mouse,
@@ -222,8 +227,8 @@ function App() {
           group: 1
         }
       });
-      mcontstraint.mouse.element.removeEventListener("mousewheel", mcontstraint.mouse.mousewheel);
-      mcontstraint.mouse.element.removeEventListener("DOMMouseScroll", mcontstraint.mouse.mousewheel);
+      // canvasElement.removeEventListener("wheel", render.mouseWheel());
+      // mcontstraint.mouse.element.removeEventListener("DOMMouseScroll", mcontstraint.mouse.mousewheel);
       Matter.World.add(world, constraint);
       Matter.World.add(world, mcontstraint);
 
@@ -245,6 +250,10 @@ function App() {
       init(renderer);
 
     };
+    p5Instance.mouseWheel = (event: WheelEvent) => {
+      window.scrollBy(0, event.deltaY)
+      return true;
+    }
 
     // p5Instance.mouseClicked = (event: PointerEvent) => {
     //   console.log(event);
@@ -254,13 +263,14 @@ function App() {
       console.log("resized called", canvasDivRef.current?.clientWidth);
 
       p5Instance.resizeCanvas(canvasDivRef.current?.clientWidth || 600, canvasDivRef.current?.clientHeight || 600);
+      divisions = (canvasDivRef.current?.clientWidth || 600) / 13;
       p5Instance.clear();
       alphabets = [];
       chains = [];
       balls = [];
       Matter.Engine.clear(engine);
       Matter.World.clear(world, false);
-      // init()
+      init(renderer);
     }
     // let textX = 0;
     // let textY = 100;
@@ -311,8 +321,8 @@ function App() {
 
         <header className="header fixed w-screen top-0 z-10">
           <nav className="text-cream navbar text-center pt-14 pb-8 px-40 flex justify-between">
-            <a className="" href="/">
-              GS
+            <a className="header__logo" href="/">
+              <img src="windmill.svg" width={30} height={30}></img>
             </a>
             <div className="header__links flex gap-12">
               <a className="header__links_link">About</a>
@@ -322,12 +332,13 @@ function App() {
           </nav>
         </header>
         <main className="home pt-28">
-          <section className="home__canvas grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative">
-            {/* <p className="row-3">I am a software developer with around 3 years of experience.</p> */}
+          <section className="home__canvas grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative mb-28">
             <div
               className="w-full h-full absolute"
               ref={canvasDivRef}
             ></div>
+            <h1 className="text-cream text-3xl row-start-3 col-start-2 text-center">Hi, I am a software developer based in Windsor, Canada</h1>
+
           </section>
           <section className="home__canvas grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative">
           </section>
