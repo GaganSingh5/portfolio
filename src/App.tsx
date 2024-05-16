@@ -24,7 +24,6 @@ function App() {
     let renderer: p5.Renderer;
     let leftWall = null;
     let rightWall = null;
-    // let topWall = null;
     let bottomWall = null;
     let divisions = (canvasDivRef.current?.clientWidth || 600) / 13;
 
@@ -33,7 +32,7 @@ function App() {
 
       leftWall = Matter.Bodies.rectangle(-25,
         (canvasDivRef.current?.clientHeight || 600) / 2,
-        100, (canvasDivRef.current?.clientHeight || 600) + 500,
+        100, (canvasDivRef.current?.clientHeight || 600) + 1000,
         {
           isStatic: true,
           collisionFilter: {
@@ -42,7 +41,7 @@ function App() {
         }
       );
       rightWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) + 25,
-        (canvasDivRef.current?.clientHeight || 600) / 2, 100, (canvasDivRef.current?.clientHeight || 600) + 500,
+        (canvasDivRef.current?.clientHeight || 600) / 2, 100, (canvasDivRef.current?.clientHeight || 600) + 1000,
         {
           isStatic: true,
           collisionFilter: {
@@ -50,21 +49,14 @@ function App() {
           }
         }
       );
-      // topWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) / 2, -20,
-      //   canvasDivRef.current?.clientWidth || 600,
-      //   50,
-      //   {
-      //     isStatic: true,
 
-      //   }
-      // );
       bottomWall = Matter.Bodies.rectangle((canvasDivRef.current?.clientWidth || 600) / 2,
         (canvasDivRef.current?.clientHeight || 600) + 45,
         (canvasDivRef.current?.clientWidth || 600) + 500,
         100,
         {
           isStatic: true,
-          restitution: 0.8,
+          restitution: 1,
           collisionFilter: {
             group: 0x001
           }
@@ -132,7 +124,6 @@ function App() {
             bodyA: chain.links.bodies[chain.links.bodies.length - 1],
             pointA: { x: 20, y: 0 },
             pointB: { x: 0, y: -10 },
-
             bodyB: alphabet.alphabet,
             length: 0,
             stiffness: 0.2
@@ -199,7 +190,7 @@ function App() {
           Math.random() * 20 + 10,
           {
             mass: 1,
-            restitution: 0.5,
+            restitution: 0.7,
             // frictionAir: 0.09,
             isStatic: false, collisionFilter: {
               category: 5,
@@ -242,9 +233,9 @@ function App() {
       renderer = p5Instance.createCanvas(canvasDivRef.current?.clientWidth || 600, canvasDivRef.current?.clientHeight || 600);
       engine = Matter.Engine.create();
       world = engine.world;
-      engine.gravity.y = 1;
+      engine.gravity.y = 9.8;
       engine.gravity.x = 0;
-      engine.gravity.scale = 0.01
+      // engine.gravity.scale = 
 
 
       init(renderer);
@@ -260,6 +251,7 @@ function App() {
     // };
 
     p5Instance.windowResized = () => {
+
       console.log("resized called", canvasDivRef.current?.clientWidth);
 
       p5Instance.resizeCanvas(canvasDivRef.current?.clientWidth || 600, canvasDivRef.current?.clientHeight || 600);
@@ -308,12 +300,19 @@ function App() {
   useEffect(() => {
     const p5Instance = new p5(sketch, canvasDivRef.current!);
 
-    // On component destruction, delete the p5 instance
     return () => {
       p5Instance.remove();
     };
   });
 
+  const zero = (): string => {
+    let zeros = ""
+    for (let i = 0; i < 200; i++) {
+      zeros += "0";
+    }
+
+    return zeros;
+  }
 
   return (
     <>
@@ -332,15 +331,21 @@ function App() {
           </nav>
         </header>
         <main className="home pt-28">
-          <section className="home__canvas grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative mb-28">
+          <section className="home__section grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative mb-28">
             <div
               className="w-full h-full absolute"
               ref={canvasDivRef}
             ></div>
             <h1 className="text-cream text-3xl row-start-3 col-start-2 text-center">Hi, I am a software developer based in Windsor, Canada</h1>
-
           </section>
-          <section className="home__canvas grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative">
+          <section className="profile__section grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative px-40">
+            <div className="profile__photo row-start-1 row-end-4 col-start-3 col-end-3 my-auto">
+              <img className="" src="profile.png"></img>
+            </div>
+            <div className="profile__photo row-start-1 row-end-4 col-start-1 col-end-3 my-auto">
+              <h1 className="text-cream text-4xl font-bold">About Me</h1>
+              <h1 className="text-cream text-2xl">Hello there! I'm a seasoned software engineer with three years of hands-on experience in the industry, currently honing my skills further through pursuing a Master's in Applied Computing at the University of Windsor. My passion lies in leveraging code to solve complex problems efficiently, and I'm dedicated to staying abreast of the latest technological advancements. I thrive in collaborative environments, where I can combine my expertise with others to deliver impactful solutions that drive innovation. Let's connect and collaborate on exciting projects to make a difference together! </h1>
+            </div>
           </section>
         </main>
       </div>
