@@ -338,6 +338,31 @@ function App() {
               <h1 className="text-cream text-2xl">Hello there! I'm a seasoned software engineer with three years of hands-on experience in the industry, currently honing my skills further through pursuing a Master's in Applied Computing at the University of Windsor. My passion lies in leveraging code to solve complex problems efficiently, and I'm dedicated to staying abreast of the latest technological advancements. I thrive in collaborative environments, where I can combine my expertise with others to deliver impactful solutions that drive innovation. Let's connect and collaborate on exciting projects to make a difference together! </h1>
             </div>
           </section>
+
+          <section className="projects__section grid grid-cols-3 grid-rows-3 h-[calc(100vh-7rem)] relative px-40">
+            
+            <div className="projects__section__title row-start-1 row-end-1 col-start-1 col-end-1 my-auto">
+              <h1 className="text-cream text-4xl font-bold">Projects</h1>
+            </div>
+            <div className="projects__section__showcase flex flex-col row-start-1 row-end-4 col-start-2 col-end-4 my-auto">
+              <div className="projects__section__showcase row-start-1 row-end-1 col-start-2 col-end-4 my-auto">
+                <h1 className="text-cream text-4xl font-bold text-center border-b-2 py-5">Netshell</h1>
+              </div>
+
+              <div className="projects__section__showcase row-start-1 row-end-1 col-start-2 col-end-4 my-auto">
+                <h1 className="text-cream text-4xl font-bold text-center border-b-2 py-5">EmployeeFatigueScorePrediction</h1>
+              </div>
+
+              <div className="projects__section__showcase row-start-1 row-end-1 col-start-2 col-end-4 my-auto">
+                <h1 className="text-cream text-4xl font-bold text-center border-b-2 py-5">Salary Stratos</h1>
+              </div>
+
+              <div className="projects__section__showcase row-start-1 row-end-1 col-start-2 col-end-4 my-auto">
+                <h1 className="text-cream text-4xl font-bold text-center border-b-2  py-5">Vision Player</h1>
+              </div>
+            </div>
+            
+          </section>
         </main>
       </div>
     </>
