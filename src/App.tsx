@@ -305,15 +305,6 @@ function App() {
     };
   });
 
-  const zero = (): string => {
-    let zeros = ""
-    for (let i = 0; i < 200; i++) {
-      zeros += "0";
-    }
-
-    return zeros;
-  }
-
   return (
     <>
       <div className="app antialiased bg-pink bg-noise">
